@@ -1,0 +1,3 @@
+-I./data_structures/header
+-std=c11
+-Wall -Wextra -Werror
