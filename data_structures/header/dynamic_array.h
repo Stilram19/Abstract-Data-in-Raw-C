@@ -25,5 +25,7 @@ void da_set(DynamicArray* arr, size_t index, size_t value);
 void da_push_back(DynamicArray* arr, size_t value);
 void da_insert_at(DynamicArray* arr, size_t index, size_t value);
 void da_remove_at(DynamicArray* arr, size_t index);
+size_t da_capacity(DynamicArray* arr);
+size_t da_size(DynamicArray* arr);
 
 #endif
