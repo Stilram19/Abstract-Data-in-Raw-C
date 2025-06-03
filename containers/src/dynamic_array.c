@@ -5,7 +5,11 @@
 # include <stdlib.h>
 # include <assert.h>
 # include <string.h>
+# include <stdint.h>
 
+
+#define DA_OK 0
+#define DA_ERR -1
 
 /* private attributes */
 typedef struct DynamicArray {
@@ -21,14 +25,23 @@ typedef struct DynamicArray {
 ** if reallocation went successful, both arr->data and arr->capacity are changed
 ** otherwise nothing is changed
 ** returns a pointer to the new allocated memory if reallocation went successful,
-** returns NULL otherwise to indicate that the reallocation failed
+** returns NULL otherwise to indicate failure
 */
-static void *helper_reallocate(DynamicArray *arr, size_t new_capacity) {
+static void *helper_reallocate(DynamicArray *arr) {
     if (arr == NULL) {
         return (NULL);
     }
 
-    assert(new_capacity > 0);
+    /* prevent capacity overflow */
+    if (arr->capacity > SIZE_MAX / 2) {
+        return (NULL);
+    }
+
+    size_t new_capacity = arr->capacity * 2;
+
+    if (new_capacity == 0) {
+        return (NULL);
+    }
 
     void *newData = realloc(arr->data, new_capacity * arr->elem_size); 
     if (newData == NULL) {
@@ -40,77 +53,68 @@ static void *helper_reallocate(DynamicArray *arr, size_t new_capacity) {
     return (newData);
 }
 
-/* returns the offset in bytes (in terms of the element size) */
-static size_t helper_get_offset_in_bytes(DynamicArray *arr, size_t offset) {
-    if (arr == NULL) {
-        return (offset);
-    }
-
-    return (offset * arr->elem_size);
-}
-
 /*
  ** this helper right shifts the array by one, starting from startIndex
- ** if arr is NULL or arr->data is NULL, nothing happens
+ ** arr and arr->data mustn't be NULL
  ** size must be less than capacity
  ** startIndex needs to be less than the size
  ** if call is successful arr->size is incremented
 */
-static void helper_right_shift(DynamicArray *arr, size_t startIndex) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+static int helper_right_shift(DynamicArray *arr, size_t startIndex) {
+    if (arr == NULL || arr->data == NULL || arr->size >= arr->capacity || startIndex >= arr->size) {
+        return (DA_ERR);
     }
 
-    assert(arr->size < arr->capacity);
-    assert(startIndex < arr->size);
-
-    size_t srcOffset = helper_get_offset_in_bytes(arr, startIndex);
-    size_t destOffset = helper_get_offset_in_bytes(arr, startIndex + 1);
-    size_t length = helper_get_offset_in_bytes(arr, arr->size - startIndex);
+    size_t srcOffset = startIndex * arr->elem_size;
+    size_t destOffset = (startIndex + 1) * arr->elem_size;
+    size_t length = (arr->size - startIndex) * arr->elem_size;
     void *srcPtr = (char*)arr->data + srcOffset; 
     void *destPtr = (char*)arr->data + destOffset; 
 
     memmove(destPtr, srcPtr, length);
     arr->size++;
+
+    return (DA_OK);
 }
 
 /*
  ** this helper left shits elements one time, starting from startIndex
- ** if arr is NULL or arr->data is NULL, nothing happens
+ ** arr and arr->data mustn't be NULL
  ** startIndex must be less than or equals arr->size and greater than 0
  ** if call is successful arr->size is decremented
 */
-static inline void helper_left_shift(DynamicArray *arr, size_t startIndex) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+static inline int helper_left_shift(DynamicArray *arr, size_t startIndex) {
+    if (arr == NULL || arr->data == NULL || startIndex > arr->size || startIndex == 0) {
+        return (DA_ERR);
     }
-
-    assert(startIndex <= arr->size);
-    assert(startIndex > 0);
-
-    arr->size--;
 
     if (startIndex == arr->size) {
-        return ;
+        arr->size--;
+        return (DA_OK);
     }
 
-    size_t srcOffset = helper_get_offset_in_bytes(arr, startIndex);
-    size_t destOffset = helper_get_offset_in_bytes(arr, startIndex - 1);
-    size_t length = helper_get_offset_in_bytes(arr, arr->size - startIndex);
+    size_t srcOffset = startIndex * arr->elem_size;
+    size_t destOffset = (startIndex - 1) * arr->elem_size;
+    size_t length = (arr->size - startIndex) * arr->elem_size;
     void *srcPtr = (char*)arr->data + srcOffset;
     void *destPtr = (char*)arr->data + destOffset;
 
     memcpy(destPtr, srcPtr, length);
-}
+    arr->size--;
 
+    return (DA_OK);
+}
+ 
 /*
 ** the constructor function
 ** initial_capacity must be greater than 0
 ** elem_size must be greater than 0
+** returns NULL to indicate failure
 */
 DynamicArray *da_create(size_t initial_capacity, size_t elem_size) {
-    assert(initial_capacity > 0);
-    assert(elem_size > 0);
+    if (initial_capacity == 0 || elem_size == 0) {
+        return (NULL);
+    }
 
     DynamicArray *da = malloc(sizeof(DynamicArray));
 
@@ -151,12 +155,12 @@ void da_destroy(DynamicArray *arr) {
 ** returns generic pointer to the value at the index
 ** if arr is NULL or arr->data is NULL or index is greater than arr->size, NULL is returned 
 */
-void *da_get(DynamicArray *arr, size_t index) {
+void *da_get(const DynamicArray *arr, size_t index) {
     if (arr == NULL || arr->data == NULL  || index >= arr->size) {
         return (NULL);
     }
 
-    size_t indexOffset = helper_get_offset_in_bytes(arr, index); /* index in bytes */
+    size_t indexOffset = index * arr->elem_size;/* index in bytes */
 
     return (((char*)arr->data + indexOffset));
 }
@@ -165,109 +169,111 @@ void *da_get(DynamicArray *arr, size_t index) {
 ** if array is full we reallocate twice the current capacity (amortized cost)
 ** the size is incremented, if the push_back call succeeds
 */
-void da_push_back(DynamicArray *arr, void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+int da_push_back(DynamicArray *arr, const void *ptr_to_value) {
+    if (arr == NULL || arr->data == NULL || arr->size > arr->capacity) {
+        return (DA_ERR);
     }
 
-    /* size must never be greater than capacity */
-    assert(arr->size <= arr->capacity);
-
     if (arr->size == arr->capacity) {
-        void *newData = helper_reallocate(arr, arr->capacity * 2);
+        void *newData = helper_reallocate(arr);
 
         if (newData == NULL) {
-            return ;
+            return (DA_ERR);
         }
     }
 
-    size_t indexOffset = helper_get_offset_in_bytes(arr, arr->size); /* index in bytes */
+    size_t indexOffset = arr->size * arr->elem_size;/* index in bytes */
 
     /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the back of the array */
     memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
 
     arr->size++;
+    return (DA_OK);
 }
 
 /*
 ** sets the given value in the given index
-** if arr is NULL, arr->data is NULL, then nothing is changed 
 ** the index must be less than the array size
+** arr, arr->data and ptr_to_value must be non-null pointers
+** return -1 to indicate an error, and 0 to indicate success
 */
-void da_set(DynamicArray *arr, size_t index, void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+int da_set(DynamicArray *arr, size_t index, const void *ptr_to_value) {
+    if (arr == NULL || arr->data == NULL || ptr_to_value == NULL || index >= arr->size) {
+        return (DA_ERR);
     }
 
-    /* index must be less than the array size */
-    assert(index < arr->size);
-
-    size_t indexOffset = helper_get_offset_in_bytes(arr, index); /* index in bytes */
+    size_t indexOffset = index * arr->elem_size;/* index in bytes */
 
     /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the index*/
     memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
+
+    return (DA_OK);
 }
 
 /*
  ** inserts the element pointed to by ptr_to_value at the right index
- ** if arr is NULL or arr->data is NULL, nothing will happen
- ** index must be less than or equals the array's size
+** the index must be less than or equals the array size
+** arr, arr->data and ptr_to_value must be non-null pointers
+** return -1 to indicate an error, and 0 to indicate success
 */
-void da_insert_at(DynamicArray *arr, size_t index, void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+int da_insert_at(DynamicArray *arr, size_t index, const void *ptr_to_value) {
+    if (arr == NULL || arr->data == NULL || index > arr->size) {
+        return (DA_ERR);
     }
-
-    /* index cannot be greater than size */
-    assert(index <= arr->size);
 
     /* if index is size, it means we need to insert at the back of the array */
     if (index == arr->size) {
-        da_push_back(arr, ptr_to_value);
-        return ;
+        return (da_push_back(arr, ptr_to_value));
     }
 
     /* size must not be greater than capacity (at any given time) */
-    assert(arr->size <= arr->capacity);
+    if (arr->size > arr->capacity) {
+        return (DA_ERR);
+    }
 
     if (arr->size == arr->capacity) {
-        void *newData = helper_reallocate(arr, arr->capacity * 2);
+        void *newData = helper_reallocate(arr);
         if (newData == NULL) {
-            return ;
+            return (DA_ERR);
         }
     }
 
-    /* right shift all the elements */
-    helper_right_shift(arr, index); /* it also increments the array size */
+    /* right shift all the elements starting from index */
+    if (helper_right_shift(arr, index) == DA_ERR) {
+        return (DA_ERR);
+    }
 
-    size_t indexOffset = helper_get_offset_in_bytes(arr, index); /* index in bytes */
+    size_t indexOffset = index * arr->elem_size;/* index in bytes */
 
     /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the index */
     memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
-}
 
+    return (DA_OK);
+}
 
 /*
 ** removes the element at the index
-** if arr is NULL or arr->data is NULL, nothing happens
+** arr and arr->data mustn't be NULL
 ** index must be less than the array size
+** return -1 to indicate an error, and 0 to indicate success
 */
-void da_remove_at(DynamicArray *arr, size_t index) {
-    if (arr == NULL || arr->data == NULL) {
-        return ;
+int da_remove_at(DynamicArray *arr, size_t index) {
+    if (arr == NULL || arr->data == NULL || index >= arr->size) {
+        return (DA_ERR);
     }
 
-    /* index must be less than arr->size (valid index) */
-    assert(index < arr->size);
+    /* shift elements left starting from element after index */
+    if (helper_left_shift(arr, index + 1) == DA_ERR) {
+        return (DA_ERR);
+    }
 
-    /* left shift */
-    helper_left_shift(arr, index + 1); /* it also decrements the array size */
+    return (DA_OK);
 }
 
 /*
 ** returns the size of the given dynamic array
 */
-size_t da_size(DynamicArray *arr) {
+size_t da_size(const DynamicArray *arr) {
     if (arr == NULL || arr->data == NULL) {
         return (0);
     }
@@ -278,7 +284,7 @@ size_t da_size(DynamicArray *arr) {
 /*
 ** returns the capacity of the given dynamic array
 */
-size_t da_capacity(DynamicArray* arr) {
+size_t da_capacity(const DynamicArray* arr) {
     if (arr == NULL || arr->data == NULL) {
         return (0);
     }
@@ -286,3 +292,7 @@ size_t da_capacity(DynamicArray* arr) {
     return (arr->capacity);
 }
 
+/* clears the array (size becomes zero) */
+void da_clear(DynamicArray *arr) {
+    if (arr) arr->size = 0;
+}
