@@ -3,6 +3,10 @@
 
 #include <stddef.h>
 
+/* status codes */
+#define DA_OK 0
+#define DA_ERR -1
+
 /* opaque dynamic array type */
 typedef struct DynamicArray DynamicArray;
 

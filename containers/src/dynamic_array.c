@@ -8,12 +8,9 @@
 # include <stdint.h>
 
 
-#define DA_OK 0
-#define DA_ERR -1
-
 /* private attributes */
 typedef struct DynamicArray {
-    void* data;           // raw byte buffer
+    void *data;           // raw byte buffer
     size_t size;          // number of elements
     size_t capacity;      // number of slots
     size_t elem_size;     // size of each element
@@ -169,8 +166,8 @@ void *da_get(const DynamicArray *arr, size_t index) {
 ** if array is full we reallocate twice the current capacity (amortized cost)
 ** the size is incremented, if the push_back call succeeds
 */
-int da_push_back(DynamicArray *arr, const void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL || arr->size > arr->capacity) {
+int da_push_back(DynamicArray *arr, const void *src) {
+    if (arr == NULL || arr->data == NULL || src == NULL || arr->size > arr->capacity) {
         return (DA_ERR);
     }
 
@@ -184,8 +181,8 @@ int da_push_back(DynamicArray *arr, const void *ptr_to_value) {
 
     size_t indexOffset = arr->size * arr->elem_size;/* index in bytes */
 
-    /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the back of the array */
-    memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
+    /* copy elem_size bytes from the memory block pointed to by 'src', to the back of the array */
+    memcpy((char*)arr->data + indexOffset, src, arr->elem_size);
 
     arr->size++;
     return (DA_OK);
@@ -194,36 +191,36 @@ int da_push_back(DynamicArray *arr, const void *ptr_to_value) {
 /*
 ** sets the given value in the given index
 ** the index must be less than the array size
-** arr, arr->data and ptr_to_value must be non-null pointers
+** arr, arr->data and src must be non-null pointers
 ** return -1 to indicate an error, and 0 to indicate success
 */
-int da_set(DynamicArray *arr, size_t index, const void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL || ptr_to_value == NULL || index >= arr->size) {
+int da_set(DynamicArray *arr, size_t index, const void *src) {
+    if (arr == NULL || arr->data == NULL || src == NULL || index >= arr->size) {
         return (DA_ERR);
     }
 
     size_t indexOffset = index * arr->elem_size;/* index in bytes */
 
-    /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the index*/
-    memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
+    /* copy elem_size bytes from the memory block pointed to by 'src', to the index*/
+    memcpy((char*)arr->data + indexOffset, src, arr->elem_size);
 
     return (DA_OK);
 }
 
 /*
- ** inserts the element pointed to by ptr_to_value at the right index
+ ** inserts the element pointed to by src at the right index
 ** the index must be less than or equals the array size
-** arr, arr->data and ptr_to_value must be non-null pointers
+** arr, arr->data and src must be non-null pointers
 ** return -1 to indicate an error, and 0 to indicate success
 */
-int da_insert_at(DynamicArray *arr, size_t index, const void *ptr_to_value) {
-    if (arr == NULL || arr->data == NULL || index > arr->size) {
+int da_insert_at(DynamicArray *arr, size_t index, const void *src) {
+    if (arr == NULL || arr->data == NULL || src == NULL || index > arr->size) {
         return (DA_ERR);
     }
 
     /* if index is size, it means we need to insert at the back of the array */
     if (index == arr->size) {
-        return (da_push_back(arr, ptr_to_value));
+        return (da_push_back(arr, src));
     }
 
     /* size must not be greater than capacity (at any given time) */
@@ -245,8 +242,8 @@ int da_insert_at(DynamicArray *arr, size_t index, const void *ptr_to_value) {
 
     size_t indexOffset = index * arr->elem_size;/* index in bytes */
 
-    /* copy elem_size bytes from the memory block pointed to by 'ptr_to_value', to the index */
-    memcpy((char*)arr->data + indexOffset, ptr_to_value, arr->elem_size);
+    /* copy elem_size bytes from the memory block pointed to by 'src', to the index */
+    memcpy((char*)arr->data + indexOffset, src, arr->elem_size);
 
     return (DA_OK);
 }
