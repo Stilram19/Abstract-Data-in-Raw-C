@@ -15,9 +15,9 @@ SinglyList *sl_create(size_t elem_size);
 void sl_destroy(SinglyList *list);
 
 /* insertion */
-int sl_push_front(SinglyList *list, const void *value);
-int sl_push_back(SinglyList *list, const void *value);
-int sl_insert_at(SinglyList *list, size_t index, const void *value);
+int sl_push_front(SinglyList *list, const void *src);
+int sl_push_back(SinglyList *list, const void *src);
+int sl_insert_at(SinglyList *list, size_t index, const void *src); /* list is 0-indexed */
 
 /* deletion */
 int sl_pop_front(SinglyList *list);
