@@ -126,7 +126,7 @@ void sl_destroy(SinglyList *list) {
 
 /* pushes `src` into the front of the list */
 int sl_push_front(SinglyList *list, const void *src) {
-    if (list == NULL) {
+    if (list == NULL || src == NULL) {
         return (SL_ERR);
     }
 
@@ -147,7 +147,7 @@ int sl_push_front(SinglyList *list, const void *src) {
 
 /* pushes `src` into the back of the list */
 int sl_push_back(SinglyList *list, const void *src) {
-    if (list == NULL) {
+    if (list == NULL || src == NULL) {
         return (SL_ERR);
     }
 
@@ -171,7 +171,7 @@ int sl_push_back(SinglyList *list, const void *src) {
 /* list is 0-indexed */
 /* index must be within the range [0, size] */
 int sl_insert_at(SinglyList *list, size_t index, const void *src) {
-    if (list == NULL) {
+    if (list == NULL || src == NULL) {
         return (SL_ERR);
     }
 
