@@ -17,16 +17,16 @@ void sl_destroy(SinglyList *list);
 /* insertion */
 int sl_push_front(SinglyList *list, const void *src);
 int sl_push_back(SinglyList *list, const void *src);
-int sl_insert_at(SinglyList *list, size_t index, const void *src); /* list is 0-indexed */
+int sl_insert_at(SinglyList *list, size_t index, const void *src); // singly list is 0-indexed
 
 /* deletion */
 int sl_pop_front(SinglyList *list);
-int sl_remove_at(SinglyList *list, size_t index);
+int sl_remove_at(SinglyList *list, size_t index); // singly list is 0-indexed
 
 /* access */
 void *sl_front(const SinglyList *list);
 void *sl_back(const SinglyList *list);
-void *sl_get(const SinglyList *list, size_t index);
+void *sl_get(const SinglyList *list, size_t index); // singly list is 0-indexed
 
 /* utilities */
 size_t sl_size(const SinglyList *list);

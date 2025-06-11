@@ -220,6 +220,7 @@ int sl_pop_front(SinglyList *list) {
     SLNode *next = helper_destroy_node(list->head); 
     list->head = next;
 
+    /* handling the case where list->size is 1 */
     if (next == NULL) {
         list->tail = NULL;
     }
