@@ -54,7 +54,7 @@ static SLNode *helper_get_node(const SinglyList *list, size_t index) {
         return (NULL);
     }
 
-    if (index > list->size - 1) {
+    if (index >= list->size) {
         return (NULL);
     }
 
@@ -235,7 +235,7 @@ int sl_remove_at(SinglyList *list, size_t index) {
         return (SL_ERR);
     }
 
-    if (index > list->size - 1) {
+    if (index >= list->size) {
         return (SL_ERR);
     }
 

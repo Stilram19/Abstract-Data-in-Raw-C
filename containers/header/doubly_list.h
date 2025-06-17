@@ -20,7 +20,8 @@ int dl_push_back(DoublyList *list, const void *src);
 int dl_insert_at(DoublyList *list, size_t index, const void *src); // doubly list is 0-indexed
 
 /* deletion */
-int dl_pop_front(DoublyList *list);
+int dl_pop_front(DoublyList *list); // constant time complexity
+int dl_pop_back(DoublyList *list); // constant time complexity
 int dl_remove_at(DoublyList *list, size_t index); // doubly list is 0-indexed
 
 /* access */

@@ -80,18 +80,27 @@ static DLNode *helper_delete_node(DoublyList *list, DLNode *node) {
 
 /* returns a pointer to the node at the index `index` */
 static DLNode *helper_get_node(const DoublyList *list, size_t index) {
-    if (list == NULL) {
+    if (list == NULL || list->head == NULL) {
         return (NULL);
     }
 
-    if (index > list->size - 1) {
+    if (index >= list->size) {
         return (NULL);
     }
 
-    DLNode *curr = list->head->next;
+    DLNode *curr;
+    if (index < list->size / 2) {
+        curr = list->head->next;
+        while (index--) {
+            curr = curr->next;
+        }
 
-    while (index--) {
-        curr = curr->next;
+        return (curr);
+    }
+
+    curr = list->tail->prev;
+    for (size_t i = list->size - 1; i > index; --i) {
+        curr = curr->prev;
     }
 
     return (curr);
@@ -140,7 +149,6 @@ void dl_destroy(DoublyList *list) {
     free(list->tail);
     free(list);
 }
-
 
 
 /* insertion */
@@ -222,8 +230,104 @@ int dl_insert_at(DoublyList *list, size_t index, const void *src) {
 }
 
 
+/* deletion */
+int dl_pop_front(DoublyList *list) {
+    if (list == NULL || list->head == NULL) {
+        return (DL_ERR);
+    }
+
+    if (list->size == 0) {
+        return (DL_OK);
+    }
+
+    if (helper_delete_node(list, list->head->next) == NULL) {
+        return (DL_ERR);
+    }
+
+    list->size--;
+    return (DL_OK);
+}
+
+int dl_pop_back(DoublyList *list) {
+    if (list == NULL || list->tail == NULL) {
+        return (DL_ERR);
+    }
+
+    if (list->size == 0) {
+        return (DL_OK);
+    }
+
+    if (helper_delete_node(list, list->tail->prev) == NULL) {
+        return (DL_ERR);
+    }
+
+    list->size--;
+    return (DL_OK);
+}
+
+int dl_remove_at(DoublyList *list, size_t index) {
+    if (list == NULL) {
+        return (DL_ERR);
+    }
+
+    if (index == 0) {
+        return (dl_pop_front(list));
+    }
+
+    if (index + 1 == list->size) {
+        return (dl_pop_back(list));
+    }
+
+    DLNode *node = helper_get_node(list, index);
+
+    if (helper_delete_node(list, node) == NULL) {
+        return (DL_ERR);
+    }
+
+    list->size--;
+    return (DL_OK);
+}
+
+/* access */
+void *dl_front(const DoublyList *list) {
+    if (list == NULL || list->head == NULL || list->head->next == NULL) {
+        return (NULL);
+    }
+
+    return (list->head->next->data);
+}
+
+void *dl_back(const DoublyList *list) {
+    if (list == NULL || list->tail == NULL || list->tail->prev == NULL) {
+        return (NULL);
+    }
+
+    return (list->tail->prev->data);
+}
+
+void *dl_get(const DoublyList *list, size_t index) {
+    DLNode *node = helper_get_node(list, index);
+
+    if (node == NULL) {
+        return (NULL);
+    }
+
+    return (node->data);
+}
 
 /* utilities */
+
+size_t dl_size(const DoublyList *list) {
+    if (list == NULL) {
+        return (0);
+    }
+
+    return (list->size);
+}
+
+int dl_is_empty(const DoublyList *list) {
+    return (list == NULL || list->size == 0);
+}
 
 /* clears the list, after this call, the list->size is 0 */
 void dl_clear(DoublyList *list) {
