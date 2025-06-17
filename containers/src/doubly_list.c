@@ -124,6 +124,7 @@ DoublyList *dl_create(size_t elem_size) {
 
     dl->tail = malloc(sizeof(DLNode));
     if (dl->tail == NULL) {
+        free(dl->head);
         free(dl);
         return (NULL);
     }
