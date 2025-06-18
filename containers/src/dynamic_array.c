@@ -162,6 +162,17 @@ void *da_get(const DynamicArray *arr, size_t index) {
     return (((char*)arr->data + indexOffset));
 }
 
+
+/* return a pointer to the last element in `arr` */
+void *da_back(const DynamicArray *arr) {
+    if (arr == NULL || arr->size == 0) {
+        return (NULL);
+    }
+
+    return (da_get(arr, arr->size - 1));
+}
+
+
 /* adds the value at the end of the dynamic array 
 ** if array is full we reallocate twice the current capacity (amortized cost)
 ** the size is incremented, if the push_back call succeeds
@@ -265,6 +276,19 @@ int da_remove_at(DynamicArray *arr, size_t index) {
     }
 
     return (DA_OK);
+}
+
+/* removes the last element in the array */
+int da_pop(DynamicArray *arr) {
+    if (arr == NULL) {
+        return (DA_ERR);
+    }
+
+    if (arr->size == 0) {
+        return (DA_ERR);
+    }
+
+    return (da_remove_at(arr, arr->size - 1));
 }
 
 /*
