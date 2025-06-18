@@ -19,7 +19,7 @@ This project is built with a systems programming mindset and focuses on:
 | `dynamic_array`       | ✅ Done    | Raw buffer                        | ✅ High  | STL equivalent: `std::vector` |
 | `singly_list`         | ✅ Done    | Node with `next` pointer          | ✅ High  | Learn ownership and pointer manipulation |
 | `doubly_list`         | ✅ Done    | Node with `prev` and `next`       | ✅ High  | Needed for `deque`, `stack`, `queue` |
-| `stack`               | ⏳ Planned | Based on `dynamic_array` or list  | ✅ High  | LIFO container |
+| `stack`               | ✅ Done    | Based on `dynamic_array` or list  | ✅ High  | LIFO container |
 | `queue`               | ⏳ Planned | Based on list or circular buffer  | ✅ High  | FIFO container |
 | `deque`               | ⏳ Planned | DLL or circular array             | ✅ Medium| Double-ended queue |
 | `ring_buffer`         | ⏳ Planned | Fixed-size circular buffer        | 🔶 Medium| Useful in real-time systems |
