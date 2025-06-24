@@ -8,7 +8,7 @@
 
 /**
  * opaque structure representing a queue
- * implemented internally as a circular buffer using dynamic array
+ * stores elements of fixed size in first-in, first-out order
  */
 typedef struct Queue Queue;
 
