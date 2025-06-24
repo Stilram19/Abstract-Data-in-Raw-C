@@ -40,7 +40,7 @@ void sl_destroy(SinglyList *list);
 int sl_push_front(SinglyList *list, const void *src);
 
 /**
- * inserts an element at the back of the list
+ * inserts an element at the back of the list in constant time O(1)
  *
  * @param list pointer to the singly list
  * @param src pointer to the element to insert
@@ -62,7 +62,7 @@ int sl_insert_at(SinglyList *list, size_t index, const void *src);
 /* deletion */
 
 /**
- * removes the front element from the list
+ * removes the front element from the list in constant time O(1)
  *
  * @param list pointer to the singly list
  * @return SL_OK on success, SL_ERR on failure
