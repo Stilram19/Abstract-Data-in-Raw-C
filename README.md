@@ -14,11 +14,11 @@ This project is built with a systems programming mindset and focuses on:
 
 ## 🧱 Containers Overview (ordered by priority)
 
-| Container             | Status     | Backing / Strategy                | Priority | Notes |
+| Container             | Status     | Backing / Strategy               | Priority | Notes |
 |-----------------------|------------|----------------------------------|----------|-------|
-| `dynamic_array`       | ✅ Done    | raw buffer                        | ✅ High  | STL equivalent: `std::vector` |
+| `dynamic_array`       | ✅ Done    | raw buffer                       | ✅ High  | STL equivalent: `std::vector` |
 | `stack`               | ✅ Done    | based on `dynamic_array`         | ✅ High  | LIFO container |
-| `queue`               | ⏳ Planned | based on singly/doubly list      | ✅ High  | FIFO container |
+| `queue`               | ✅ Done    | based on singly list             | ✅ High  | FIFO container |
 | `priority_queue`      | ⏳ Planned | binary heap (min/max)            | ✅ High  | scheduling, greedy algorithms |
 | `hash_map`            | ⏳ Planned | open addressing / chaining       | ✅ High  | key-value store |
 | `hash_set`            | ⏳ Planned | open addressing / chaining       | ✅ High  | fast unique set |
