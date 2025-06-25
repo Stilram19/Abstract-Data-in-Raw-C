@@ -75,6 +75,12 @@ int da_push_back(DynamicArray *arr, const void *src);
 int da_insert_at(DynamicArray *arr, size_t index, const void *src);
 
 /**
+ * swaps elements at index i and j in the dynamic array
+ * returns DA_OK on success, DA_ERR on invalid input or index out of bounds
+ */
+int da_swap(DynamicArray *arr, size_t i, size_t j);
+
+/**
  * removes the element at a specific index, shifting elements left
  *
  * @param arr pointer to the dynamic array
