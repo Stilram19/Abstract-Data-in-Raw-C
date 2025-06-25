@@ -20,7 +20,7 @@ This project is built with a systems programming mindset and focuses on:
 | `stack`               | ✅ Done    | based on `dynamic_array`         | ✅ High  | LIFO container |
 | `queue`               | ✅ Done    | based on singly list             | ✅ High  | FIFO container |
 | `heap`                | ✅  Done   | based on `dynamic_array`         | ✅ High  | sorting, greedy algorithms |
-| `priority_queue`      | ⏳ Planned | binary heap (min/max)            | ✅ High  | scheduling, greedy algorithms |
+| `priority_queue`      | ✅  Done   | binary heap (min/max)            | ✅ High  | scheduling, greedy algorithms |
 | `hash_map`            | ⏳ Planned | open addressing / chaining       | ✅ High  | key-value store |
 | `hash_set`            | ⏳ Planned | open addressing / chaining       | ✅ High  | fast unique set |
 | `set`                 | ⏳ Planned | backed by hash map or tree       | ✅ High  | interview classic |
