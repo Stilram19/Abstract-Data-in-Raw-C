@@ -7,6 +7,10 @@
 # include <string.h>
 # include <stdint.h>
 
+# if defined(__GNUC__) || defined(__clang__)
+    # define USE_ALLOCA
+    # include <alloca.h>
+#endif
 
 /* private attributes */
 typedef struct DynamicArray {
@@ -258,24 +262,25 @@ int da_insert_at(DynamicArray *arr, size_t index, const void *src) {
 
     return (DA_OK);
 }
-
 int da_swap(DynamicArray *arr, size_t i, size_t j) {
     if (arr == NULL || i >= arr->size || j >= arr->size) {
         return (DA_ERR);
     }
 
-    // we need a temporary memory for swap operation
+#ifdef USE_ALLOCA
+    void *temp = alloca(arr->elem_size);
+#else
     void *temp = malloc(arr->elem_size);
+    if (temp == NULL) return (DA_ERR);
+#endif
 
-    if (temp == NULL) {
-        return (DA_ERR);
-    }
+    memcpy(temp, (char *)arr->data + i * arr->elem_size, arr->elem_size);
+    memcpy((char *)arr->data + i * arr->elem_size, (char *)arr->data + j * arr->elem_size, arr->elem_size);
+    memcpy((char *)arr->data + j * arr->elem_size, temp, arr->elem_size);
 
-    memcpy(temp, (char*)arr->data + i * arr->elem_size, arr->elem_size); // temp <- a[i]
-    memcpy((char*)arr->data + i * arr->elem_size, (char*)arr->data + j * arr->elem_size, arr->elem_size); // a[i] <- a[j]
-    memcpy((char*)arr->data + j * arr->elem_size, temp, arr->elem_size); // a[j] <- temp
-
+#ifndef USE_ALLOCA
     free(temp);
+#endif
 
     return (DA_OK);
 }

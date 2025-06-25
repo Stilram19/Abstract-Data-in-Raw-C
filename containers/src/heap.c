@@ -91,9 +91,8 @@ int heap_remove_top(Heap *h) {
 
     size_t curr_i = 0;
     size_t size = da_size(h->arr);
-    size_t last_i = da_size(h->arr);
 
-    while (curr_i < last_i) {
+    while (curr_i < size) {
         size_t left_i = 2 * curr_i + 1;
         size_t right_i = 2 * curr_i + 2;
         size_t highest_priority_i = curr_i;
