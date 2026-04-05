@@ -45,6 +45,28 @@ This project is built with a systems programming mindset and focuses on:
 
 ---
 
+## 📈 Sorting Algorithms (NEW)
+
+| Algorithm           | Status     | Strategy / Type                  | Priority | Notes |
+|---------------------|------------|----------------------------------|----------|-------|
+| `bubble_sort`       | ⏳ Planned | comparison, exchange             | ✅ High  | simple, educational |
+| `insertion_sort`    | ⏳ Planned | comparison, insertion            | ✅ High  | efficient on nearly sorted data |
+| `selection_sort`    | ⏳ Planned | comparison, selection            | ✅ High  | simple, inefficient |
+| `merge_sort`        | ⏳ Planned | comparison, divide-and-conquer   | ✅ High  | stable, efficient, requires memory |
+| `quick_sort`        | ⏳ Planned | comparison, divide-and-conquer   | ✅ High  | fast, in-place (usually) |
+| `heap_sort`         | ⏳ Planned | comparison, selection            | ✅ High  | in-place, uses `heap` container |
+| `shell_sort`        | ⏳ Planned | comparison, insertion variant    | 🔶 Medium| improvement on insertion sort |
+| `counting_sort`     | ⏳ Planned | non-comparison, integer          | 🔶 Medium| linear time, for specific ranges |
+| `radix_sort`        | ⏳ Planned | non-comparison, integer          | 🔶 Medium| sorts digit by digit |
+| `bucket_sort`       | ⏳ Planned | non-comparison, distribution     | 🔶 Medium| for uniformly distributed data |
+| `tim_sort`          | ⏳ Planned | hybrid (merge + insertion)       | 🔶 Medium| Python's standard sort |
+| `introspective_sort`| ⏳ Planned | hybrid (quick + heap)            | 🔶 Medium| C++ `std::sort` |
+| `tree_sort`         | ⏳ Planned | comparison, tree-based           | 🔽 Low   | uses a binary search tree |
+| `cube_sort`         | ⏳ Planned | comparison, parallel-friendly    | 🔽 Low   | complex, academic |
+| `external_sort`     | ⏳ Planned | for data larger than RAM         | 🔽 Low   | uses external storage (disk) |
+
+---
+
 ## 🔧 Features
 
 - generic: every container accepts element size at construction time
