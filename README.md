@@ -49,7 +49,7 @@ This project is built with a systems programming mindset and focuses on:
 
 | Algorithm           | Status     | Strategy / Type                  | Priority | Notes |
 |---------------------|------------|----------------------------------|----------|-------|
-| `bubble_sort`       | ⏳ Planned | comparison, exchange             | ✅ High  | simple, educational |
+| `bubble_sort`       | ✅ Done    | comparison, exchange             | ✅ High  | simple, educational |
 | `insertion_sort`    | ⏳ Planned | comparison, insertion            | ✅ High  | efficient on nearly sorted data |
 | `selection_sort`    | ⏳ Planned | comparison, selection            | ✅ High  | simple, inefficient |
 | `merge_sort`        | ⏳ Planned | comparison, divide-and-conquer   | ✅ High  | stable, efficient, requires memory |
