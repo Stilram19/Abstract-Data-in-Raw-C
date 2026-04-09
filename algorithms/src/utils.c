@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 # if defined(__GNUC__) || defined(__clang__)
     # define USE_ALLOCA

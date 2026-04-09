@@ -7,7 +7,7 @@
 #define UTIL_ERR -1
 
 /**
-* @brief generic swap function to swap any to memory regions specifying the size of each element
+* @brief generic swap function to swap any two memory regions of the same size 
 * @warning uses `alloca` when available (stack allocation): large element sizes may cause stack overflow
 * @return UTIL_ERR to indicate error, and UTIL_OK otherwise
 */
