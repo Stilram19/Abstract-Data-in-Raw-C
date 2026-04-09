@@ -1,3 +1,4 @@
 -I./containers/header
+-I./algorithms/header
 -std=c11
 -Wall -Wextra -Werror
