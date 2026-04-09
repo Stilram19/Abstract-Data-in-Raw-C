@@ -7,6 +7,10 @@ int bubble_sort(void *base, size_t size, size_t elem_size, Comparator cmp) {
         return (SORT_ERR);
     }
 
+    if (size < 2) {
+        return (SORT_OK);
+    }
+
     int swapped = 1; // flag keeping track of whether we swapped
     size_t n = size;
 
@@ -18,7 +22,7 @@ int bubble_sort(void *base, size_t size, size_t elem_size, Comparator cmp) {
  
             if (cmp(a, b) > 0) {
                 if (swap(a, b, elem_size) == UTIL_ERR) {
-                    return (UTIL_ERR);
+                    return (SORT_ERR);
                 }
                 swapped = 1;
             }

@@ -33,7 +33,6 @@ void print_array(const int *arr, size_t size) {
 
 int test_bubble_sort() {
     /* test cases */
-    int empty[] = {};
     int single[] = {42};
     int sorted[] = {1, 2, 3, 4, 5};
     int reversed[] = {5, 4, 3, 2, 1};
@@ -46,8 +45,8 @@ int test_bubble_sort() {
     int expected_random[] = {1, 2, 3, 4, 5};
     int expected_duplicates[] = {1, 1, 2, 3, 3};
 
-    /* empty array */
-    if (bubble_sort(empty, 0, sizeof(int), cmp_int) != SORT_OK) {
+    /* empty array (we can use any other array with size 0)*/
+    if (bubble_sort(single, 0, sizeof(int), cmp_int) != SORT_OK) {
         printf("Empty array failed\n"); return (0);
     }
 
