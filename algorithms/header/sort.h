@@ -3,20 +3,21 @@
 
 #include <stddef.h>
 
-#define SORT_OK
-#define SORT_ERR
+#define SORT_OK 0
+#define SORT_ERR -1
 
-// @brief Comparator function used to define the ordering of the elements
-// @param a points to the first element
-// @param b points to the first element
-// @return
-// * negative value if *a < *b
-// * zero if *a == *b
-// * positive if *a > *b
-// @note
-// * comparator must be deterministic (always produces the same output for the same input)
-// * comparator must not modify elements
-typedef int (*Comparator)(void *a, void *b);
+/**
+* @brief Comparator function used to define the ordering of the elements
+* @param a points to the first element
+* @param b points to the second element
+* @return
+* * negative value if *a < *b
+* * zero if *a == *b
+* * positive if *a > *b
+* @note
+* * comparator must be deterministic (always produces the same output for the same input)
+*/
+typedef int (*Comparator)(const void *a, const void *b);
 
 // @brief using bubble sort algorithm under the hood to sort the array at `void *base`
 // @param base: pointer to the array
