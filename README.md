@@ -51,7 +51,7 @@ This project is built with a systems programming mindset and focuses on:
 |---------------------|------------|----------------------------------|----------|-------|
 | `bubble_sort`       | ✅ Done    | comparison, exchange             | ✅ High  | simple, educational |
 | `insertion_sort`    | ⏳ Planned | comparison, insertion            | ✅ High  | efficient on nearly sorted data |
-| `selection_sort`    | ⏳ Planned | comparison, selection            | ✅ High  | simple, inefficient |
+| `selection_sort`    | ✅ Done    | comparison, selection            | ✅ High  | simple, inefficient |
 | `merge_sort`        | ⏳ Planned | comparison, divide-and-conquer   | ✅ High  | stable, efficient, requires memory |
 | `quick_sort`        | ⏳ Planned | comparison, divide-and-conquer   | ✅ High  | fast, in-place (usually) |
 | `heap_sort`         | ⏳ Planned | comparison, selection            | ✅ High  | in-place, uses `heap` container |
