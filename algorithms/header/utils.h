@@ -9,7 +9,7 @@
 /**
 * @brief generic swap function to swap any two memory regions of the same size
 * @param temp should point to an allocated memory region of at least elem_size bytes
-* @param temp should not be same as `a` or `b`, because this may result in swap call corrupting data
+* @warning `temp` should not be same as `a` or `b`, because this may result in swap call corrupting data
 * @return UTIL_ERR to indicate error, and UTIL_OK otherwise
 */
 int swap(void *a, void *b, void *temp, size_t elem_size);
