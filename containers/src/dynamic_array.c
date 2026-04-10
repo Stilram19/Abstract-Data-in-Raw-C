@@ -7,17 +7,13 @@
 # include <string.h>
 # include <stdint.h>
 
-# if defined(__GNUC__) || defined(__clang__)
-    # define USE_ALLOCA
-    # include <alloca.h>
-#endif
-
 /* private attributes */
 typedef struct DynamicArray {
     void *data;           // raw byte buffer
     size_t size;          // number of elements
     size_t capacity;      // number of slots
     size_t elem_size;     // size of each element
+    void *swap_temp;
 } DynamicArray;
 
 /* private helpers */
@@ -126,6 +122,13 @@ DynamicArray *da_create(size_t initial_capacity, size_t elem_size) {
     da->data = malloc(initial_capacity * elem_size);
 
     if (da->data == NULL) {
+        free(da);
+        return (NULL);
+    }
+
+    da->swap_temp = malloc(elem_size); // pre allocated swap temp (used to swap array elements)
+
+    if (da->swap_temp == NULL) {
         free(da);
         return (NULL);
     }
@@ -262,25 +265,21 @@ int da_insert_at(DynamicArray *arr, size_t index, const void *src) {
 
     return (DA_OK);
 }
+
 int da_swap(DynamicArray *arr, size_t i, size_t j) {
     if (arr == NULL || i >= arr->size || j >= arr->size) {
         return (DA_ERR);
     }
 
-#ifdef USE_ALLOCA
-    void *temp = alloca(arr->elem_size);
-#else
-    void *temp = malloc(arr->elem_size);
-    if (temp == NULL) return (DA_ERR);
-#endif
+    if (i == j) {
+        return (DA_OK);
+    }
+
+    void *temp = arr->swap_temp;
 
     memcpy(temp, (char *)arr->data + i * arr->elem_size, arr->elem_size);
     memcpy((char *)arr->data + i * arr->elem_size, (char *)arr->data + j * arr->elem_size, arr->elem_size);
     memcpy((char *)arr->data + j * arr->elem_size, temp, arr->elem_size);
-
-#ifndef USE_ALLOCA
-    free(temp);
-#endif
 
     return (DA_OK);
 }
