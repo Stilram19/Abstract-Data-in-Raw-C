@@ -129,6 +129,7 @@ DynamicArray *da_create(size_t initial_capacity, size_t elem_size) {
     da->swap_temp = malloc(elem_size); // pre allocated swap temp (used to swap array elements)
 
     if (da->swap_temp == NULL) {
+        free(da->data);
         free(da);
         return (NULL);
     }
@@ -150,6 +151,10 @@ void da_destroy(DynamicArray *arr) {
 
     if (arr->data != NULL) {
         free(arr->data);
+    }
+
+    if (arr->swap_temp != NULL) {
+        free(arr->swap_temp);
     }
 
     free(arr);
