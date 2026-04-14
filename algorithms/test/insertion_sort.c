@@ -31,7 +31,7 @@ void print_array(const int *arr, size_t size) {
     }                                                    \
 } while(0)
 
-int test_selection_sort() {
+int test_insertion_sort() {
     /* test cases */
     int single[] = {42};
     int sorted[] = {1, 2, 3, 4, 5};
