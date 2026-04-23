@@ -40,4 +40,13 @@ int selection_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 // @param elem_size: the size of each element in the array
 // @param cmp: comparator function used to define the order of the array elements
 int insertion_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
+
+
+// @brief using merge sort algorithm to sort the array at `void *base`
+// @param base: pointer to the array
+// @param size: array size
+// @param elem_size: the size of each element in the array
+// @param cmp: comparator function used to define the order of the array elements
+int merge_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
+
 #endif
