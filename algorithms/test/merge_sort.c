@@ -31,7 +31,7 @@ void print_array(const int *arr, size_t size) {
     }                                                    \
 } while(0)
 
-int test_insertion_sort() {
+int test_merge_sort() {
     /* test cases */
     int single[] = {42};
     int sorted[] = {1, 2, 3, 4, 5};
@@ -46,45 +46,45 @@ int test_insertion_sort() {
     int expected_duplicates[] = {1, 1, 2, 3, 3};
 
     /* empty array (we can use any other array with size 0)*/
-    if (insertion_sort(single, 0, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(single, 0, sizeof(int), cmp_int) != SORT_OK) {
         printf("Empty array failed\n"); return (0);
     }
 
     /* single element array */
-    if (insertion_sort(single, 1, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(single, 1, sizeof(int), cmp_int) != SORT_OK) {
         printf("Single element failed\n"); return (0);
     }
 
     /* already sorted */
-    if (insertion_sort(sorted, 5, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(sorted, 5, sizeof(int), cmp_int) != SORT_OK) {
         printf("Sorted array failed\n"); return (0);
     }
     ASSERT_EQUAL_ARRAY(sorted, expected_sorted, 5);
 
     /* reversed array */
-    if (insertion_sort(reversed, 5, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(reversed, 5, sizeof(int), cmp_int) != SORT_OK) {
         printf("Reversed array failed\n"); return (0);
     }
     ASSERT_EQUAL_ARRAY(reversed, expected_reversed, 5);
 
     /* random array */
-    if (insertion_sort(random, 5, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(random, 5, sizeof(int), cmp_int) != SORT_OK) {
         printf("Random array failed\n"); return (0);
     }
     ASSERT_EQUAL_ARRAY(random, expected_random, 5);
 
     /* duplicates */
-    if (insertion_sort(duplicates, 5, sizeof(int), cmp_int) != SORT_OK) {
+    if (merge_sort(duplicates, 5, sizeof(int), cmp_int) != SORT_OK) {
         printf("Duplicates array failed\n"); return (0);
     }
     ASSERT_EQUAL_ARRAY(duplicates, expected_duplicates, 5);
 
-    printf("All insertion_sort tests passed!\n");
+    printf("All merge_sort tests passed!\n");
     return (1);
 }
 
 int main() {
-    if (!test_insertion_sort()) {
+    if (!test_merge_sort()) {
         return (EXIT_FAILURE);
     }
     return (EXIT_SUCCESS);
