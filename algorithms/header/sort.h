@@ -25,7 +25,7 @@ typedef int (*Comparator)(const void *a, const void *b);
 // @param size: array size
 // @param elem_size: the size of each element in the array
 // @param cmp: comparator function used to define the order of the array elements
-// time complexity is O(n ^ 2)
+// time complexity is O(n^2)
 int bubble_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 
 // @brief using selection sort algorithm to sort the array at `void *base` (fewer swap operations compared to bubble_sort)
@@ -34,7 +34,7 @@ int bubble_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 // @param size: array size
 // @param elem_size: the size of each element in the array
 // @param cmp: comparator function used to define the order of the array elements
-// time complexity is O(n ^ 2)
+// time complexity is O(n^2)
 int selection_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 
 // @brief using insertion sort algorithm to sort the array at `void *base`
@@ -43,7 +43,7 @@ int selection_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 // @param size: array size
 // @param elem_size: the size of each element in the array
 // @param cmp: comparator function used to define the order of the array elements
-// time complexity is O(n ^ 2)
+// time complexity is O(n^2)
 int insertion_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 
 // @brief using merge sort algorithm to sort the array at `void *base`
@@ -52,7 +52,7 @@ int insertion_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 // @param size: array size
 // @param elem_size: the size of each element in the array
 // @param cmp: comparator function used to define the order of the array elements
-// time complexity is O(n * log(n))
+// time complexity is O(n log n))
 int merge_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 
 #endif

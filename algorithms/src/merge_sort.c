@@ -4,7 +4,7 @@
 #include <string.h>
 
 // inline merge of the two subarrays [start1, end1], [start2, end2]
-// temp is used as auxilary temporary space to copy merged subarrays
+// temp is used as auxiliary temporary space to copy merged subarrays
 static void _merge(void *base, uint8_t *temp, size_t elem_size, size_t start1, size_t end1, size_t start2, size_t end2, Comparator cmp) {
     uint8_t *arr = base;
 
@@ -37,7 +37,7 @@ static void _merge(void *base, uint8_t *temp, size_t elem_size, size_t start1, s
     }
 }
 
-static int _merge_sort(void *base, void *temp, size_t size, size_t elem_size, size_t start, size_t end, Comparator cmp) {
+static int _merge_sort(void *base, void *temp, size_t elem_size, size_t start, size_t end, Comparator cmp) {
     if (start >= end) {
         return (SORT_OK);
     }
@@ -45,10 +45,10 @@ static int _merge_sort(void *base, void *temp, size_t size, size_t elem_size, si
     // divide
     size_t mid = (start + end) / 2;
 
-    if (_merge_sort(base, temp, size, elem_size, start, mid, cmp) == SORT_ERR) {
+    if (_merge_sort(base, temp, elem_size, start, mid, cmp) == SORT_ERR) {
         return (SORT_ERR);
     }
-    if (_merge_sort(base, temp, size, elem_size, mid + 1, end, cmp) == SORT_ERR) {
+    if (_merge_sort(base, temp, elem_size, mid + 1, end, cmp) == SORT_ERR) {
         return (SORT_ERR);
     }
 
@@ -73,7 +73,7 @@ int merge_sort(void *base, size_t size, size_t elem_size, Comparator cmp) {
         return (SORT_ERR);
     }
 
-    if (_merge_sort(base, temp, size, elem_size, 0, size - 1, cmp) == SORT_ERR) {
+    if (_merge_sort(base, temp, elem_size, 0, size - 1, cmp) == SORT_ERR) {
         free(temp);
         return (SORT_ERR);
     }
