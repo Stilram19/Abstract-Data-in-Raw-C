@@ -55,4 +55,13 @@ int insertion_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 // time complexity is O(n log n))
 int merge_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
 
+// @brief using quick sort algorithm to sort the array at `void *base`
+// @brief stability is guaranteed
+// @param base: pointer to the array
+// @param size: array size
+// @param elem_size: the size of each element in the array
+// @param cmp: comparator function used to define the order of the array elements
+// time complexity is O(n log n)
+int quick_sort(void *base, size_t size, size_t elem_size, Comparator cmp);
+
 #endif
